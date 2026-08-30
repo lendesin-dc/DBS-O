@@ -207,7 +207,7 @@ function cambiarSeleccion(botonPresionado, propiedad) {
     botonesDelGrupo.forEach(btn => btn.classList.remove('activo'));
     botonPresionado.classList.add('activo');
     configuracionActual[propiedad] = botonPresionado.innerText;
-//    document.getElementById('txt-lector').focus();
+    document.getElementById('txt-lector').focus();
 }
 
 // 2. NUEVA FUNCIÓN: CONFIRMACIÓN ACÚSTICA INDUSTRIAL (750 Hz) - OPTIMIZADA MÓVIL
@@ -283,7 +283,7 @@ async function encenderCamaraBodega() {
     // 1. Escondemos el teclado de forma forzada
     const inputReal = document.getElementById('txt-lector');
     inputReal.setAttribute('inputmode', 'none');
- //   inputReal.focus();
+    inputReal.focus();
     
     if (inputReal) {
         inputReal.blur();
