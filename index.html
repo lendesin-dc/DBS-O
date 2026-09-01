@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bodega S</title>
+    <title>Registro de Bodega S</title>
     <style>
         /* Ajustes de diseño adaptables (Mobile-First) */
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 5px; background-color: #f0f2f5; }
@@ -30,8 +30,8 @@
         button.btn-opcion.activo { background: #0d6efd; color: white; border-color: #0d6efd; box-shadow: 0 2px 4px rgba(13,110,253,0.3); }
         
         .franja-lector { margin-bottom: 10px; background: #e7f1ff; padding: 7px; border-radius: 6px; border: 1px solid #b6d4fe; }
-        .franja-lector label { font-size: 26px; display: block; font-weight: bold; margin-bottom: 16px; color: #084298; }
-        .input-qr { width: 100%; padding: 5px; font-size: 18px; border: 2px solid #86b7fe; border-radius: 6px; box-sizing: border-box; }
+        .franja-lector label { font-size: 26px; display: block; font-weight: bold; margin-bottom: 20px; color: #084298; }
+        .input-qr { width: 100%; padding: 8px; font-size: 18px; border: 2px solid #86b7fe; border-radius: 6px; box-sizing: border-box; }
         
         /* Contenedor responsivo para que la tabla no rompa el diseño en celular */
         .tabla-contenedor { overflow-x: auto; border: 1px solid #dee2e6; border-radius: 6px; margin-top: 10px; }
@@ -52,7 +52,7 @@
 <body>
 
 <div class="contenedor">
-    <h2>Bodega S</h2>
+    <h2>Registro de Bodega S</h2>
 
     <!-- FILAS DE BOTONES ADAPTABLES -->
     <div class="franja-botones">
@@ -107,7 +107,7 @@
   <div style="display: flex; align-items: center; gap: 15px;">
     <h3 style="margin: 0; font-family: sans-serif;">Registros</h3>
     <!-- NUESTRO BOTÓN INTERRUPTOR INTERACTIVO -->
-    <button id="btn-cambiar-modo" onclick="conmutarModoVista()" style="background-color: #2563eb; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: background 0.2s;">
+    <button id="btn-cambiar-modo" onclick="conmutarModoVista()" style="background-color: #2563eb; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: background 0.2s;">
       📊 Ver SubTotales
     </button>
   </div>
@@ -140,11 +140,11 @@
   <div style="font-size: 1.8rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; opacity: 0.9;">Lectura Exitosa</div>
   
   <div style="background:rgba(0,0,0,0.2); padding: 25px 40px; border-radius: 16px; min-width: 280px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
-    <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 15px;">SKU:</div>
-    <div id="exito-sku" style="font-size: 3.0rem; font-weight: 900; line-height: 1; margin-bottom: 25px; word-break: break-all; letter-spacing: 1px;">-</div>
+    <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 5px;">SKU:</div>
+    <div id="exito-sku" style="font-size: 3.1rem; font-weight: 900; line-height: 1; margin-bottom: 25px; word-break: break-all; letter-spacing: 1px;">-</div>
     
-    <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 15px;">SERIE:</div>
-    <div id="exito-serie" style="font-size: 3.0rem; font-weight: 900; line-height: 1; word-break: break-all; color: #fef08a; letter-spacing: 1px;">-</div>
+    <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 5px;">SERIE:</div>
+    <div id="exito-serie" style="font-size: 3.1rem; font-weight: 900; line-height: 1; word-break: break-all; color: #fef08a; letter-spacing: 1px;">-</div>
   </div>
   <div style="font-size: 1.0rem; margin-top: 30px; opacity: 0.7; font-style: italic;">Continuando en 2 segundos...</div>
 </div>
@@ -207,7 +207,7 @@ function cambiarSeleccion(botonPresionado, propiedad) {
     botonesDelGrupo.forEach(btn => btn.classList.remove('activo'));
     botonPresionado.classList.add('activo');
     configuracionActual[propiedad] = botonPresionado.innerText;
-    document.getElementById('txt-lector').focus();
+//    document.getElementById('txt-lector').focus();
 }
 
 // 2. NUEVA FUNCIÓN: CONFIRMACIÓN ACÚSTICA INDUSTRIAL (750 Hz) - OPTIMIZADA MÓVIL
@@ -256,7 +256,7 @@ function mostrarConfirmacionGigante(sku, serie) {
   // Temporizador para que se desvanezca solo a los 3500 milisegundos (3,5 segundos)
   setTimeout(() => {
     modalExito.style.display = "none";
-  }, 2500);
+  }, 2000);
 }
 
 
@@ -281,14 +281,15 @@ function sincronizarMotorHardware() {
 // 4. NUEVA FUNCIÓN: TRANSMISIÓN DE VIDEO CON RESOLUCIÓN EN BODEGA (CORREGIDA)
 async function encenderCamaraBodega() {
     // 1. Escondemos el teclado de forma forzada
-    const inputReal = document.getElementById('txt-lector');
-    inputReal.setAttribute('inputmode', 'none');
-    inputReal.focus();
-    
+    const inputReal = document.getElementById('C-328');
+
     if (inputReal) {
         inputReal.blur();
     }
-    // Al tocar el botón con el dedo, disparamos esto para habilitar el permiso del parlante
+ 	// >>> AÑADE ESTA LÍNEA AQUÍ PARA APAGAR EL TECLADO EN EL LECTOR QR <<<
+ 	document.getElementById('txt-lector').setAttribute('inputmode', 'none');
+	
+	// Al tocar el botón con el dedo, disparamos esto para habilitar el permiso del parlante
     sonarBip750Hz(); 
   
     // 2. Si no existe la interfaz del visor en el HTML, la inyectamos dinámicamente
@@ -366,7 +367,7 @@ function apagarCamaraBodega() {
     // En lugar de hacer focus() en la caja de texto (lo que levantaría el teclado),
     // buscamos el primer botón de "Anular" disponible en tu tabla azul.
     const primerBotonAnular = document.querySelector('.btn-anular');
-
+    
     if (primerBotonAnular) {
         primerBotonAnular.focus(); // El foco se queda atrapado en el botón sin abrir el teclado
         console.log("Teclado abajo. Foco posicionado en el botón Anular.");
@@ -375,6 +376,8 @@ function apagarCamaraBodega() {
         // el foco a toda la página para asegurar que el teclado no se levante.
         document.activeElement.blur();
     }
+	// >>> AÑADE ESTA LÍNEA AQUÍ PARA RESTAURAR EL TECLADO PARA LECTURAS MANUALES FUTURAS <<<
+ 	document.getElementById('txt-lector').setAttribute('inputmode', 'text');
 }
 
 
@@ -382,11 +385,7 @@ function apagarCamaraBodega() {
 function procesarLectura(evento) {
     if (evento.key !== 'Enter') return;
     const input = document.getElementById('txt-lector');
-
-    input.setAttribute('inputmode', 'txt');
-    inputReal.focus();
-    
- 	const cadenaQR = input.value.trim();
+    const cadenaQR = input.value.trim();
     if (cadenaQR === "") return;
 
     if (!cadenaQR.includes('#')) {
@@ -398,23 +397,40 @@ function procesarLectura(evento) {
     const segmentos = cadenaQR.split('#');
     const skuExtraido = segmentos[0] || 'ERROR';
     const serieExtraida = segmentos[1] || 'ERROR';
-    const estadoDestinoExtraido = segmentos[2] || 'ERROR';
-
+    const estadoDestinoExtraido = segmentos[2] || '-';
     const momentoActual = Date.now();
-    const registroDuplicado = historialLecturas.find(item => 
-        item.serie === serieExtraida && 
-        item.esAnulado === false &&
-        item.estadoOrigen !== 'ANULADO'
-    );
-    
-    if (registroDuplicado) {
-        const diferenciaMinutos = (momentoActual - registroDuplicado.id) / (1000 * 60);
-        if (diferenciaMinutos < MINUTOS_RESTRICCION_DUPLICADO) {
-            const minsRestantes = (MINUTOS_RESTRICCION_DUPLICADO - diferenciaMinutos).toFixed(1);
-            alert(`¡PRODUCTO DUPLICADO!\n\nLa serie [${serieExtraida}] ya fue registrada hace ${diferenciaMinutos.toFixed(1)} minutos.\nEspere ${minsRestantes} minutos para repetir.`);
-            input.value = "";
+
+	// >>> REEMPLAZA EL BLOQUE DE REGISTRO DUPLICADO CON ESTE CONTROL DE SEGURIDAD <<<
+	const registroDuplicado = historialLecturas.find(item => 
+  		item &&
+  		item.serie === serieExtraida && 
+  		serieExtraida !== 'ERROR' && // Evita falsos positivos con lecturas corruptas iniciales
+  		item.esAnulado === false &&
+  		item.estadoOrigen !== 'ANULADO'
+		);	
+	
+//	const registroDuplicado = historialLecturas.find(item => 
+//        item.serie === serieExtraida && 
+  //      item.esAnulado === false &&
+  // 	  item.estadoOrigen !== 'ANULADO'
+ //			);
+
+	if (registroDuplicado && registroDuplicado.id) { // Validamos que tenga un ID real
+  const diferenciaMinutos = (momentoActual - registroDuplicado.id) / (1000 * 60);
+  if (diferenciaMinutos < MINUTOS_RESTRICCION_DUPLICADO) {
+    const minsRestantes = (MINUTOS_RESTRICCION_DUPLICADO - diferenciaMinutos).toFixed(1);
+    alert(`¡PRODUCTO DUPLICADO!\n\nLa serie [${serieExtraida}] ya fue registrada hace ${diferenciaMinutos.toFixed(1)} minutos.\nEspere ${minsRestantes} minutos para repetir.`);
+    input.value = "";
+    return;
+	  
+ //   if (registroDuplicado) {
+ //       const diferenciaMinutos = (momentoActual - registroDuplicado.id) / (1000 * 60);
+  //      if (diferenciaMinutos < MINUTOS_RESTRICCION_DUPLICADO) {
+ //           const minsRestantes = (MINUTOS_RESTRICCION_DUPLICADO - diferenciaMinutos).toFixed(1);
+ //           alert(`¡PRODUCTO DUPLICADO!\n\nLa serie [${serieExtraida}] ya fue registrada hace ${diferenciaMinutos.toFixed(1)} minutos.\nEspere ${minsRestantes} minutos para repetir.`);
+  //          input.value = "";
      //       input.focus();
-            return;
+  //          return;
         }
     }
     
@@ -457,7 +473,7 @@ function solicitarAnulacion(idRegistro) {
         registro.esAnulado = true;
       //  registro.estadoOrigen = "R"; 
       //  registro.estadoDestino = "ANULADO"; 
-        registro.destino = "ANULA ID: " + String(idRegistro); 
+        registro.destino = "NULO";   // + String(idRegistro); 
         guardarEnMemoriaLocal();
         actualizarTablaVista();
         enviarAGoogleSheets(registro);
@@ -634,7 +650,7 @@ function sincronizarHistorialPendiente() {
   
   // Recorremos nuestro arreglo local buscando los que se quedaron sin sincronizar
   historialLecturas.forEach((reg, index) => {
-    if (reg.sincronizado !== true && !reg.esAnulado) {
+    if (reg.sincronizado !== true      ) {                    //   && !reg.esAnulado ... despues de true y antes del )
       
       fetch(URL_GOOGLE_APP, {
         method: "POST",
