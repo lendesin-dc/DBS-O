@@ -320,7 +320,7 @@ async function encenderCamaraBodega() {
                 audio: false
             });
             video.srcObject = streamActivoBodega;
-            bucleEscaneo = setInterval(analizarCuadroEnVivo, 180); 
+            bucleEscaneo = setInterval(analizarCuadroEnVivo, 300); 
         } catch (err) {
             alert("Acceso a la cámara trasera denegado o no disponible.");
             modal.style.display = "none";
