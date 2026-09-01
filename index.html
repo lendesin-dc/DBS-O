@@ -135,19 +135,20 @@
 </div>
 
 <!-- VENTANA EMERGENTE GIGANTE PARA CONFIRMACIÓN DE LECTURA -->
-<div id="modal-exito-gigante" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(16,185,129,0.95); z-index:10000; align-items:center; justify-content:center; flex-direction:column; color:white; font-family:sans-serif; text-align:center; padding:20px; box-sizing:border-box;">
-  <div style="font-size: 6rem; margin-bottom: 0px;">✅</div>
-  <div style="font-size: 1.8rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; opacity: 0.9;">Lectura Exitosa</div>
-  
-  <div style="background:rgba(0,0,0,0.2); padding: 25px 40px; border-radius: 16px; min-width: 280px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
-    <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 5px;">SKU:</div>
-    <div id="exito-sku" style="font-size: 3.1rem; font-weight: 900; line-height: 1; margin-bottom: 25px; word-break: break-all; letter-spacing: 1px;">-</div>
-    
-    <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 5px;">SERIE:</div>
-    <div id="exito-serie" style="font-size: 3.1rem; font-weight: 900; line-height: 1; word-break: break-all; color: #fef08a; letter-spacing: 1px;">-</div>
-  </div>
-  <div style="font-size: 1.0rem; margin-top: 30px; opacity: 0.7; font-style: italic;">Continuando en 2 segundos...</div>
+<!-- >>> BUSCA EL DIV DE #modal-exito-gigante Y REEMPLÁZALO COMPLETAMENTE CON ESTO <<< -->
+<div id="modal-exito-gigante" onclick="pantallaVerdePresionada()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(16,185,129,0.98); z-index:10000; align-items:center; justify-content:center; flex-direction:column; color:white; font-family:sans-serif; text-align:center; padding:20px; box-sizing:border-box; cursor:pointer;">
+ <div style="font-size: 1.8rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; opacity: 0.9;">Lectura Exitosa</div>
+ 
+ <div style="background:rgba(0,0,0,0.2); padding: 25px 40px; border-radius: 16px; min-width: 280px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+   <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 5px;">SKU:</div>
+   <div id="exito-sku" style="font-size: 3.1rem; font-weight: 900; line-height: 1; margin-bottom: 25px; word-break: break-all; letter-spacing: 1px;">-</div>
+ 
+   <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 5px;">SERIE:</div>
+   <div id="exito-serie" style="font-size: 3.1rem; font-weight: 900; line-height: 1; word-break: break-all; color: #fef08a; letter-spacing: 1px;">-</div>
+ </div>
+ <div style="font-size: 1.3rem; margin-top: 40px; opacity: 0.9; font-weight: bold; animation: pulse 1.5s infinite;">👇 TOQUE LA PANTALLA /n/n  PARA /n/n EL SIGUIENTE QR 👇</div>
 </div>
+
 
 
 <!-- Reemplaza desde aquí hasta el final de tu archivo -->
@@ -244,22 +245,34 @@ function sonarBip750Hz() {
   }
 }
 
+// >>> NUEVAS REGLAS DE NAVEGACIÓN EN RÁFAGA <<<
 
 function mostrarConfirmacionGigante(sku, serie) {
-  // Inyectamos los textos en mayúsculas y de forma masiva
   document.getElementById('exito-sku').innerText = String(sku).toUpperCase();
   document.getElementById('exito-serie').innerText = String(serie).toUpperCase();
   
+  // Desplegamos el modal verde gigante
   const modalExito = document.getElementById('modal-exito-gigante');
   modalExito.style.display = "flex";
   
-  // Temporizador para que se desvanezca solo a los 3500 milisegundos (3,5 segundos)
-  setTimeout(() => {
-    modalExito.style.display = "none";
-  }, 2000);
+  // ¡IMPORTANTE!: Quitamos el setTimeout automático para que se quede esperando el toque del operario
 }
 
+// Esta función se ejecuta al tocar cualquier parte de la pantalla verde
+function pantallaVerdePresionada() {
+  // 1. Ocultamos el cartel verde de éxito
+  document.getElementById('modal-exito-gigante').style.display = "none";
+  
+  // 2. Reactivamos el bucle de escaneo inmediatamente sin levantar el teclado
+  const modalEscaner = document.getElementById('modal-escaner');
+  if (modalEscaner) {
+    modalEscaner.style.display = "flex";
+    // Volvemos a encender el motor de captura de imágenes
+    bucleEscaneo = setInterval(analizarCuadroEnVivo, 300);
+  }
+}
 
+	
 // 3. NUEVA FUNCIÓN: COMPROBACIÓN NATIVA DE DISPOSITIVOS
 function sincronizarMotorHardware() {
     if ('BarcodeDetector' in window) {
@@ -276,8 +289,6 @@ function sincronizarMotorHardware() {
 }
 
     
-// 4. NUEVA FUNCIÓN: TRANSMISIÓN DE VIDEO CON RESOLUCIÓN EN BODEGA
-
 // 4. NUEVA FUNCIÓN: TRANSMISIÓN DE VIDEO CON RESOLUCIÓN EN BODEGA (CORREGIDA)
 async function encenderCamaraBodega() {
     // 1. Escondemos el teclado de forma forzada
