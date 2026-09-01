@@ -391,6 +391,21 @@ function apagarCamaraBodega() {
  	document.getElementById('txt-lector').setAttribute('inputmode', 'text');
 }
 
+	// Modificamos el cierre definitivo para cuando presionen "Cancelar Escaneo" (Botón Rojo)
+function apagarCamaraBodegaNativa() {
+  clearInterval(bucleEscaneo);
+  if (streamActivoBodega) {
+    streamActivoBodega.getTracks().forEach(track => track.stop());
+  }
+  
+  // Cerramos los dos paneles por seguridad
+  const modal = document.getElementById('modal-escaner');
+  if (modal) modal.style.display = "none";
+  document.getElementById('modal-exito-gigante').style.display = "none";
+  
+  // Volvemos a la aplicación principal sin abrir el teclado
+  document.activeElement.blur();
+}
 
 // --- TU LÓGICA DE NEGOCIO ORIGINAL INTEGRADA SINTÁCTICAMENTE ---
 function procesarLectura(evento) {
