@@ -146,7 +146,7 @@
    <div style="font-size: 1.2rem; opacity: 0.85; margin-bottom: 5px;">SERIE:</div>
    <div id="exito-serie" style="font-size: 3.1rem; font-weight: 900; line-height: 1; word-break: break-all; color: #fef08a; letter-spacing: 1px;">-</div>
  </div>
- <div style="font-size: 1.3rem; margin-top: 40px; opacity: 0.9; font-weight: bold; animation: pulse 1.5s infinite;">👇 TOQUE LA PANTALLA /n/n  PARA /n/n EL SIGUIENTE QR 👇</div>
+ <div style="font-size: 1.3rem; margin-top: 40px; opacity: 0.9; font-weight: bold; animation: pulse 1.5s infinite;">👇 TOQUE LA PANTALLA <br> PARA <br> EL SIGUIENTE QR 👇</div>
 </div>
 
 
@@ -258,20 +258,14 @@ function mostrarConfirmacionGigante(sku, serie) {
   // ¡IMPORTANTE!: Quitamos el setTimeout automático para que se quede esperando el toque del operario
 }
 
-// Esta función se ejecuta al tocar cualquier parte de la pantalla verde
-function pantallaVerdePresionada() {
-  // 1. Ocultamos el cartel verde de éxito
+
+	function pantallaVerdePresionada() {
+  // 1. Escondemos el cartel de éxito
   document.getElementById('modal-exito-gigante').style.display = "none";
   
-  // 2. Reactivamos el bucle de escaneo inmediatamente sin levantar el teclado
-  const modalEscaner = document.getElementById('modal-escaner');
-  if (modalEscaner) {
-    modalEscaner.style.display = "flex";
-    // Volvemos a encender el motor de captura de imágenes
-    bucleEscaneo = setInterval(analizarCuadroEnVivo, 300);
-  }
+  // 2. LLAMAMOS AL ENCENDIDO ORIGINAL (Levanta el hardware de cero de forma limpia)
+  encenderCamaraBodega(); //
 }
-
 	
 // 3. NUEVA FUNCIÓN: COMPROBACIÓN NATIVA DE DISPOSITIVOS
 function sincronizarMotorHardware() {
@@ -315,7 +309,7 @@ async function encenderCamaraBodega() {
                 <video id="video-bodega-stream" autoplay playsinline style="width:100%; height:100%; object-fit:cover;"></video>
                 <div id="laser-guia" style="position:absolute; top:50%; left:10%; width:80%; height:2px; background:rgba(255,0,0,0.7); box-shadow:0 0 4px #ff0000; pointer-events:none; z-index:10;"></div>
             </div>
-            <button onclick="apagarCamaraBodega()" style="margin-top:20px; padding:12px 25px; background:#dc3545; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">❌ Cancelar Escaneo</button>
+            <button onclick="apagarCamaraBodega()" style="margin-top:20px; padding:12px 25px; background:#dc3545; font-size:1.3rem; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">❌ Cancelar Escaneo</button>
         `;
         document.body.appendChild(modal);
     }
@@ -389,22 +383,6 @@ function apagarCamaraBodega() {
     }
 	// >>> AÑADE ESTA LÍNEA AQUÍ PARA RESTAURAR EL TECLADO PARA LECTURAS MANUALES FUTURAS <<<
  	document.getElementById('txt-lector').setAttribute('inputmode', 'text');
-}
-
-	// Modificamos el cierre definitivo para cuando presionen "Cancelar Escaneo" (Botón Rojo)
-function apagarCamaraBodegaNativa() {
-  clearInterval(bucleEscaneo);
-  if (streamActivoBodega) {
-    streamActivoBodega.getTracks().forEach(track => track.stop());
-  }
-  
-  // Cerramos los dos paneles por seguridad
-  const modal = document.getElementById('modal-escaner');
-  if (modal) modal.style.display = "none";
-  document.getElementById('modal-exito-gigante').style.display = "none";
-  
-  // Volvemos a la aplicación principal sin abrir el teclado
-  document.activeElement.blur();
 }
 
 // --- TU LÓGICA DE NEGOCIO ORIGINAL INTEGRADA SINTÁCTICAMENTE ---
