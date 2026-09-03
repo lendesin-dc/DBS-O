@@ -45,8 +45,10 @@
         
         /* Panel inferior de utilidades */
         .panel-inferior { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; padding-top: 5px; border-top: 1px solid #eee; }
+        .btn-grabar { background: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+        .btn-grabar:hover { background: #bc3545; }
         .btn-limpiar { background: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-        .btn-limpiar:hover { background: #5c636a; }
+        .btn-limpiar:hover { background: #dc3545; }
     </style>
 </head>
 <body>
@@ -59,9 +61,9 @@
         <div class="fila-botones">
             <label>Origen :</label>
             <div class="grupo">
-                <button class="btn-opcion activo" onclick="cambiarSeleccion(this, 'origen')">C-328</button>
-                <button class="btn-opcion" onclick="cambiarSeleccion(this, 'origen')">D-05</button>
-                <button class="btn-opcion" onclick="cambiarSeleccion(this, 'origen')">B-X</button>
+            <button class="btn-opcion activo" onclick="cambiarSeleccion(this, 'origen')">C-328</button>
+            <button class="btn-opcion" onclick="cambiarSeleccion(this, 'origen')">D-05</button>
+            <button class="btn-opcion" onclick="cambiarSeleccion(this, 'origen')">B-X</button>
 		        <button class="btn-opcion" onclick="cambiarSeleccion(this, 'origen')">D-02</button>
 		        <button class="btn-opcion" onclick="cambiarSeleccion(this, 'origen')">D-01</button>
 		        <button class="btn-opcion" onclick="cambiarSeleccion(this, 'origen')">B-07</button>
@@ -111,6 +113,7 @@
       📊 Ver SubTotales
     </button>
   </div>
+  <button id="btn-grabar-vista" onclick="grabartabla()" class="btn-grabar">Grabar Tabla</button>
   <button id="btn-limpiar-vista" onclick="limpiarPantallaCompleta()" class="btn-limpiar">Limpiar Vista</button>
 </div>
     
@@ -154,8 +157,8 @@
 <!-- Reemplaza desde aquí hasta el final de tu archivo -->
 <script>
 // 1. CONFIGURACIÓN COMPLETA DE TU ENTORNO REMOTO DE GOOGLE
-const URL_GOOGLE_APP = "https://script.google.com/macros/s/AKfycbzoGUyCM56jgevb97TDkkN5Urtcccb-wI4HaEQOYIKxhP2howg5HaGA5QAyl66osnDsuw/exec"; 
-const MINUTOS_RESTRICCION_DUPLICADO = 7;
+const URL_GOOGLE_APP = "https://script.google.com/macros/s/AKfycbzoGUyCM56jgevb97TDkkN5Urtcccb-wI4HaEQOYIKxhP2howg5HaGA5QAyl66osnDsuw/exec";
+const MINUTOS_RESTRICCION_DUPLICADO = 15;
 
 let configuracionActual = {
     origen: 'C-328',
@@ -190,6 +193,37 @@ function conmutarModoVista() {
   
   // Redibujamos la tabla instantáneamente con el nuevo modo aplicado
   actualizarTablaVista();
+}
+
+function grabartabla() {
+    const tabla = document.getElementById("tabla-registros");
+    const clonParaExcel = tabla.cloneNode(true);
+    clonParaExcel.querySelectorAll("tbody tr").forEach(fila => {
+        const inputS = fila.querySelector(".input-serie");
+        if (inputS) {
+            const tdS = inputS.closest("td");
+            tdS.innerText = inputS.value.trim() || "-";
+        }
+    });
+    let htmlTabla = clonParaExcel.outerHTML;
+    let plantillaExcel = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://w3.org"><head><meta charset="UTF-8"><style>td { mso-number-format:"\\@"; }</style></head><body>${htmlTabla}</body></html>`;
+    let blob = new Blob([plantillaExcel], { type: "application/vnd.ms-excel;charset=utf-8" });
+    let url = URL.createObjectURL(blob);
+    let link = document.createElement("a");
+
+    const Jahora = new Date(); 
+    const Janio = Jahora.getFullYear();
+    const Jmes = String(Jahora.getMonth() + 1).padStart(2, '0');
+    const Jdia = String(Jahora.getDate()).padStart(2, '0');
+
+    // Reemplazamos los ":" por "-" para que el nombre de archivo sea válido
+    const JhoraFormateada = Jahora.toLocaleTimeString('es-ES', { hour12: false }).replace(/:/g, '-');
+
+    const JtimestampStr = `${Janio}-${Jmes}-${Jdia}-${JhoraFormateada}`;
+
+    link.href = url; 
+    link.download = `Registro-Bodega-S-${JtimestampStr}.xls`;
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
 }
 
 
@@ -233,13 +267,13 @@ function sonarBip750Hz() {
     gainNode.connect(audioCtx.destination);
     
     oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+    oscillator.frequency.setValueAtTime(890, audioCtx.currentTime);
     
     // Subimos de 0.2 a 0.8 para que compita contra el ruido ambiental de las grúas horquilla
-    gainNode.gain.setValueAtTime(0.9, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.98, audioCtx.currentTime);
     
     oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.14);
+    oscillator.stop(audioCtx.currentTime + 0.10);
   } catch (e) { 
     console.error("Audio bloqueado:", e); 
   }
@@ -325,12 +359,12 @@ async function encenderCamaraBodega() {
                 audio: false
             });
             video.srcObject = streamActivoBodega;
-            bucleEscaneo = setInterval(analizarCuadroEnVivo, 300); 
+            bucleEscaneo = setInterval(analizarCuadroEnVivo, 400); 
         } catch (err) {
             alert("Acceso a la cámara trasera denegado o no disponible.");
             modal.style.display = "none";
         }
-    }, 400); // 150 milisegundos de espera para limpiar el teclado de la pantalla
+    }, 100); // 150 milisegundos de espera para limpiar el teclado de la pantalla
 }
 
     
@@ -344,13 +378,12 @@ async function analizarCuadroEnVivo() {
             const codigos = await detectorNativoBodega.detect(video);
             if (codigos.length > 0) {
                 // ¡CAPTURA EXITOSA!
-                sonarBip750Hz();
-                
+                             
                 const input = document.getElementById('txt-lector');
                 input.value = codigos[0].rawValue; // Setea la cadena compleja (ej: CH-5050NG#2605000002#B)
                 
                 apagarCamaraBodega(); // Apaga inmediatamente el hardware liberando RAM
-
+                sonarBip750Hz();
                 // Simulamos la pulsación física de la tecla Enter para disparar tu lógica nativa de guardado
                 const fakeEvent = { key: 'Enter' };
                 procesarLectura(fakeEvent);
@@ -439,11 +472,11 @@ function procesarLectura(evento) {
     }
     
     const ahora = new Date(momentoActual);
-    const año = ahora.getFullYear();
+    const anio = ahora.getFullYear();
     const mes = String(ahora.getMonth() + 1).padStart(2, '0');
     const dia = String(ahora.getDate()).padStart(2, '0');
     const horaFormateada = ahora.toLocaleTimeString('es-ES', { hour12: false });
-    const timestampStr = `${dia}/${mes}/${año} ${horaFormateada}`;
+    const timestampStr = `${dia}/${mes}/${anio} ${horaFormateada}`;
     
     const nuevoRegistro = {
         id: momentoActual,
@@ -461,10 +494,12 @@ function procesarLectura(evento) {
     historialLecturas.unshift(nuevoRegistro);
     guardarEnMemoriaLocal();
     actualizarTablaVista();
-    enviarAGoogleSheets(nuevoRegistro);
 
     // DISPARADOR DEL CARTEL GIGANTE: Añade esta línea aquí abajo
     mostrarConfirmacionGigante(skuExtraido, serieExtraida);
+
+    enviarAGoogleSheets(nuevoRegistro);
+
 
 
     input.value = "";
@@ -477,7 +512,7 @@ function solicitarAnulacion(idRegistro) {
         registro.esAnulado = true;
       //  registro.estadoOrigen = "R"; 
       //  registro.estadoDestino = "ANULADO"; 
-        registro.destino = "NULO";   // + String(idRegistro); 
+        registro.destino = "NULO"; // +String(idRegistro); 
         guardarEnMemoriaLocal();
         actualizarTablaVista();
         enviarAGoogleSheets(registro);
@@ -686,7 +721,7 @@ function sincronizarHistorialPendiente() {
 window.addEventListener('online', sincronizarHistorialPendiente);
 document.addEventListener("DOMContentLoaded", () => {
   // Por si el celular inicia con registros pendientes acumulados de turnos anteriores
-  setTimeout(sincronizarHistorialPendiente, 1500);
+  setTimeout(sincronizarHistorialPendiente, 2500);
 });
 
 </script>
