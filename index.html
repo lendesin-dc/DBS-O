@@ -367,18 +367,18 @@ async function encenderCamaraBodega() {
 
 
 // 5. NUEVA FUNCIÓN: ANÁLISIS ACELERADO POR GPU (Filtra, Inyecta y ejecuta Enter)
-function analizarCuadroEnVivo() {
+async function analizarCuadroEnVivo() {
     const video = document.getElementById('video-bodega-stream');
     if (video && video.readyState === video.HAVE_ENOUGH_DATA && detectorNativoBodega) {
         try {
-            const codigos = detectorNativoBodega.detect(video);
+            const codigos = await detectorNativoBodega.detect(video);
             if (codigos.length > 0) {
                 // ¡CAPTURA EXITOSA!
-                             
+                apagarCamaraBodega(); // Apaga inmediatamente el hardware liberando RAM             
                 const input = document.getElementById('txt-lector');
                 input.value = codigos[0].rawValue; // Setea la cadena compleja (ej: CH-5050NG#2605000002#B)
                 
-                apagarCamaraBodega(); // Apaga inmediatamente el hardware liberando RAM
+                
                 sonarBip750Hz();
                 // Simulamos la pulsación física de la tecla Enter para disparar tu lógica nativa de guardado
                 const fakeEvent = { key: 'Enter' };
