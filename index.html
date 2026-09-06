@@ -316,14 +316,14 @@ function sincronizarMotorHardware() {
 
     
 // 4. NUEVA FUNCIÓN: TRANSMISIÓN DE VIDEO CON RESOLUCIÓN EN BODEGA (CORREGIDA)
-async function encenderCamaraBodega() {
+function encenderCamaraBodega() {
     // 1. Escondemos el teclado de forma forzada
     const inputReal = document.getElementById('C-328');
 
     if (inputReal) {
         inputReal.blur();
-    }
- 	// >>> AÑADE ESTA LÍNEA AQUÍ PARA APAGAR EL TECLADO EN EL LECTOR QR <<<
+      }
+ 	// >>> APAGAR EL TECLADO EN EL LECTOR QR <<<
  	document.getElementById('txt-lector').setAttribute('inputmode', 'none');
 	
 	// Al tocar el botón con el dedo, disparamos esto para habilitar el permiso del parlante
@@ -341,7 +341,7 @@ async function encenderCamaraBodega() {
                 <video id="video-bodega-stream" autoplay playsinline style="width:100%; height:100%; object-fit:cover;"></video>
                 <div id="laser-guia" style="position:absolute; top:50%; left:10%; width:80%; height:2px; background:rgba(255,0,0,0.7); box-shadow:0 0 4px #ff0000; pointer-events:none; z-index:10;"></div>
             </div>
-            <button onclick="apagarCamaraBodega()" style="margin-top:40px; padding:20px 20px; background:#dc3545; font-size:1.8rem; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">❌ Cancelar Escaneo</button>
+            <button onclick="apagarCamaraBodega()" style="margin-top:30px; padding:20px 25px; background:#dc3545; font-size:1.5rem; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">❌ Cancelar Escaneo</button>
         `;
         document.body.appendChild(modal);
     }
@@ -352,7 +352,7 @@ async function encenderCamaraBodega() {
         const video = document.getElementById('video-bodega-stream');
 
         try {
-            streamActivoBodega = await navigator.mediaDevices.getUserMedia({
+            streamActivoBodega = navigator.mediaDevices.getUserMedia({
                 video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
                 audio: false
                 });
@@ -367,11 +367,11 @@ async function encenderCamaraBodega() {
 
 
 // 5. NUEVA FUNCIÓN: ANÁLISIS ACELERADO POR GPU (Filtra, Inyecta y ejecuta Enter)
-async function analizarCuadroEnVivo() {
+function analizarCuadroEnVivo() {
     const video = document.getElementById('video-bodega-stream');
     if (video && video.readyState === video.HAVE_ENOUGH_DATA && detectorNativoBodega) {
         try {
-            const codigos = await detectorNativoBodega.detect(video);
+            const codigos = detectorNativoBodega.detect(video);
             if (codigos.length > 0) {
                 // ¡CAPTURA EXITOSA!
                              
