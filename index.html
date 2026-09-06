@@ -153,8 +153,6 @@
 </div>
 
 
-
-<!-- Reemplaza desde aquí hasta el final de tu archivo -->
 <script>
 // 1. CONFIGURACIÓN COMPLETA DE TU ENTORNO REMOTO DE GOOGLE
 const URL_GOOGLE_APP = "https://script.google.com/macros/s/AKfycbzoGUyCM56jgevb97TDkkN5Urtcccb-wI4HaEQOYIKxhP2howg5HaGA5QAyl66osnDsuw/exec";
@@ -348,8 +346,8 @@ async function encenderCamaraBodega() {
         document.body.appendChild(modal);
     }
 
-    // 3. RETRASO CRÍTICO: Esperamos 150ms a que el teclado baje antes de renderizar la cámara
-    setTimeout(async () => {
+    // 3. RETRASO CRÍTICO Eliminado : Esperamos 150ms a que el teclado baje antes de renderizar la cámara
+    
         modal.style.display = "flex"; 
         const video = document.getElementById('video-bodega-stream');
 
@@ -357,17 +355,15 @@ async function encenderCamaraBodega() {
             streamActivoBodega = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
                 audio: false
-            });
+                });
             video.srcObject = streamActivoBodega;
             bucleEscaneo = setInterval(analizarCuadroEnVivo, 400); 
         } catch (err) {
             alert("Acceso a la cámara trasera denegado o no disponible.");
             modal.style.display = "none";
-        }
-    }, 100); // 150 milisegundos de espera para limpiar el teclado de la pantalla
+            }
+   
 }
-
-    
 
 
 // 5. NUEVA FUNCIÓN: ANÁLISIS ACELERADO POR GPU (Filtra, Inyecta y ejecuta Enter)
