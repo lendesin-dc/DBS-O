@@ -316,7 +316,7 @@ function sincronizarMotorHardware() {
 
     
 // 4. NUEVA FUNCIÓN: TRANSMISIÓN DE VIDEO CON RESOLUCIÓN EN BODEGA (CORREGIDA)
-function encenderCamaraBodega() {
+async function encenderCamaraBodega() {
     // 1. Escondemos el teclado de forma forzada
     const inputReal = document.getElementById('C-328');
 
@@ -352,7 +352,7 @@ function encenderCamaraBodega() {
         const video = document.getElementById('video-bodega-stream');
 
         try {
-            streamActivoBodega = navigator.mediaDevices.getUserMedia({
+            streamActivoBodega = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
                 audio: false
                 });
