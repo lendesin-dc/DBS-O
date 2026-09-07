@@ -14,7 +14,7 @@
         h2 { text-align: center; margin-top: 0; font-size: 1.2rem; color: #1a1a1a; }
         
         .franja-botones { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; background: #f8f9fa; padding: 5px; border-radius: 6px; }
-        .fila-botones { display: flex; flex-direction: column; gap: 7px; }
+        .fila-botones { display: flex; flex-direction: column; gap: 7px; } 
         
         /* En pantallas grandes ponemos las etiquetas al lado, en celulares arriba */
         @media(min-width: 600px) {
@@ -375,6 +375,7 @@ async function analizarCuadroEnVivo() {
             const codigos = await detectorNativoBodega.detect(video);
             if (codigos.length > 0) {
                 // ¡CAPTURA EXITOSA!
+				clearInterval(bucleEscaneo);
                 apagarCamaraBodega(); // Apaga inmediatamente el hardware liberando RAM             
                 const input = document.getElementById('txt-lector');
                 input.value = codigos[0].rawValue; // Setea la cadena compleja (ej: CH-5050NG#2605000002#B)
@@ -391,7 +392,7 @@ async function analizarCuadroEnVivo() {
 
 // 6. NUEVA FUNCIÓN: APAGADO Y CONTROL DE FOCO POS-ESCANEO
 function apagarCamaraBodega() {
-    clearInterval(bucleEscaneo);
+   // clearInterval(bucleEscaneo);
     if (streamActivoBodega) {
         streamActivoBodega.getTracks().forEach(track => track.stop());
     }
