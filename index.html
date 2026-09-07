@@ -168,7 +168,9 @@ let historialLecturas = JSON.parse(localStorage.getItem('historial_bodega')) || 
 // Variables globales para el control estricto de memoria de la cámara
 let streamActivoBodega = null;
 let bucleAnalisisBodega = null;
+let bucleEscaneo = null;	
 let detectorNativoBodega = null;
+let analisisEnProgreso = false;
 // Variable global para reutilizar el mismo canal de audio ya aprobado por el usuario
 let miAudioContextIndustrial = null;
 
