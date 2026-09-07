@@ -374,6 +374,8 @@ async function analizarCuadroEnVivo() {
     const video = document.getElementById('video-bodega-stream');
     if (video && video.readyState === video.HAVE_ENOUGH_DATA && detectorNativoBodega) {
         try {
+			if (analisisEnProgreso) return; 
+            analisisEnProgreso = true; // Cerramos la compuerta
             const codigos = await detectorNativoBodega.detect(video);
             if (codigos.length > 0) {
                 // ¡CAPTURA EXITOSA!
@@ -388,9 +390,10 @@ async function analizarCuadroEnVivo() {
                 const fakeEvent = { key: 'Enter' };
                 procesarLectura(fakeEvent);
             } else {
+				analisisEnProgreso = false;
 			//	setTimeout(analizarCuadroEnVivo, 300);
 			}
-        } catch (e) { /* Silencio cuadro a cuadro */ }
+        } catch (e) { analisisEnProgreso = false; /* Silencio cuadro a cuadro */ }
     }
 }
 
