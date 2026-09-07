@@ -357,8 +357,8 @@ async function encenderCamaraBodega() {
                 audio: false
                 });
             video.srcObject = streamActivoBodega;
-     //       bucleEscaneo = setInterval(analizarCuadroEnVivo, 400); 
-			analizarCuadroEnVivo();
+            bucleEscaneo = setInterval(analizarCuadroEnVivo, 400); 
+	//		analizarCuadroEnVivo();
         } catch (err) {
             alert("Acceso a la cámara trasera denegado o no disponible.");
             modal.style.display = "none";
@@ -386,9 +386,9 @@ async function analizarCuadroEnVivo() {
                 const fakeEvent = { key: 'Enter' };
                 procesarLectura(fakeEvent);
             } else {
-				setTimeout(analizarCuadroEnVivo, 300);
+			//	setTimeout(analizarCuadroEnVivo, 300);
 			}
-        } catch (e) { setTimeout(analizarCuadroEnVivo, 200);/* Silencio cuadro a cuadro */ }
+        } catch (e) { /* Silencio cuadro a cuadro */ }
     }
 }
 
